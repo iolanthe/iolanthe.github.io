@@ -1,0 +1,1102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[ianthe's]]></title>
+  <link href="http://iolanthe.github.io/atom.xml" rel="self"/>
+  <link href="http://iolanthe.github.io/"/>
+  <updated>2014-03-17T19:45:35+08:00</updated>
+  <id>http://iolanthe.github.io/</id>
+  <author>
+    <name><![CDATA[iolanthe]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[data structure]]></title>
+    <link href="http://iolanthe.github.io/blog/2014/03/17/6/"/>
+    <updated>2014-03-17T11:32:37+08:00</updated>
+    <id>http://iolanthe.github.io/blog/2014/03/17/6</id>
+    <content type="html"><![CDATA[<h1>图广度优先搜索算法</h1>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;queue&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span><span class='line'><span class="c1">//-------图的定义和矩阵初始化-----------</span>
+</span><span class='line'><span class="k">const</span> <span class="kt">int</span> <span class="n">MaxLen</span><span class="o">=</span><span class="mi">20</span><span class="p">;</span><span class="c1">//设定图最多包含20个顶点</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Map</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="k">private</span><span class="o">:</span>
+</span><span class='line'>  <span class="kt">bool</span> <span class="n">Visited</span><span class="p">[</span><span class="n">MaxLen</span><span class="p">];</span><span class="c1">//访问标识数组，标识每个顶点是否已访问</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">Matrix</span><span class="p">[</span><span class="n">MaxLen</span><span class="p">][</span><span class="n">MaxLen</span><span class="p">];</span><span class="c1">//图的领接矩阵</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">Vexnum</span><span class="p">;</span><span class="c1">//图的顶点数量</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kt">void</span> <span class="n">BFS</span><span class="p">(</span><span class="kt">int</span> <span class="n">v</span><span class="p">);</span><span class="c1">//广度优先，私有函数，内部调用</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">public</span><span class="o">:</span>
+</span><span class='line'>  <span class="kt">void</span> <span class="n">SetMatrix</span><span class="p">(</span><span class="kt">int</span> <span class="n">vnum</span><span class="p">,</span><span class="kt">int</span> <span class="n">mx</span><span class="p">[</span><span class="n">MaxLen</span><span class="p">][</span><span class="n">MaxLen</span><span class="p">]);</span>
+</span><span class='line'>  <span class="kt">void</span> <span class="n">BFSTraverse</span><span class="p">();</span><span class="c1">//公有函数，被main调用</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'><span class="c1">//设置领接矩阵</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">Map</span><span class="o">::</span><span class="n">SetMatrix</span><span class="p">(</span><span class="kt">int</span> <span class="n">vnum</span><span class="p">,</span><span class="kt">int</span> <span class="n">mx</span><span class="p">[</span><span class="n">MaxLen</span><span class="p">][</span><span class="n">MaxLen</span><span class="p">])</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">Vexnum</span> <span class="o">=</span> <span class="n">vnum</span><span class="p">;</span><span class="c1">//设置图的结点数</span>
+</span><span class='line'>  <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">MaxLen</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="c1">//领接矩阵初始化为0</span>
+</span><span class='line'>      <span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">MaxLen</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>          <span class="n">Matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">Vexnum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="c1">//领接矩阵接受外来参数</span>
+</span><span class='line'>      <span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">Vexnum</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>          <span class="n">Matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">mx</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="c1">//--------------广度优先遍历函数-----------</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">Map</span><span class="o">::</span><span class="n">BFSTraverse</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span><span class="c1">//对图g作深度优先遍历，公有函数</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">v</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">BFS</span><span class="p">(</span><span class="n">v</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">void</span> <span class="n">Map</span><span class="o">::</span><span class="n">BFS</span><span class="p">(</span><span class="kt">int</span> <span class="n">v</span><span class="p">)</span><span class="c1">//v是当前顶点</span>
+</span><span class='line'><span class="p">{</span><span class="c1">//按广度优先非递归遍历图G，使用辅助队列Q和访问标识数组visited</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">w</span><span class="p">,</span><span class="n">u</span><span class="p">;</span><span class="c1">//这些变量用于存放顶点编号</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="o">*</span><span class="n">AdjVex</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">Vexnum</span><span class="p">];</span><span class="c1">//存放与顶点v相连的其他顶点编号</span>
+</span><span class='line'>  <span class="n">queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">Q</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">for</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">v</span><span class="o">&lt;</span><span class="n">Vexnum</span><span class="p">;</span> <span class="o">++</span><span class="n">v</span><span class="p">)</span><span class="c1">//把访问标志数组的值全设为false</span>
+</span><span class='line'>      <span class="n">Visited</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">for</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">v</span><span class="o">&lt;</span><span class="n">Vexnum</span><span class="p">;</span> <span class="o">++</span><span class="n">v</span><span class="p">)</span><span class="c1">//遍历所有未访问的顶点</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">if</span><span class="p">(</span><span class="n">Visited</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">==</span> <span class="kc">false</span><span class="p">)</span><span class="c1">//如果v未访问</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="n">Visited</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span><span class="c1">//设访问标志数组中的v顶点为ture</span>
+</span><span class='line'>          <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">v</span><span class="o">&lt;&lt;</span><span class="s">&quot; &quot;</span><span class="p">;</span><span class="c1">//输出v和空格，表示该顶点已被访问，并用空格隔开</span>
+</span><span class='line'>          <span class="n">Q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">v</span><span class="p">);</span><span class="c1">//把v压入队列</span>
+</span><span class='line'>
+</span><span class='line'>          <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">Q</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="c1">//当队列非空，执行以下循环</span>
+</span><span class='line'>          <span class="p">{</span>
+</span><span class='line'>              <span class="n">u</span><span class="o">=</span><span class="n">Q</span><span class="p">.</span><span class="n">front</span><span class="p">();</span><span class="c1">//取队头元素放入u中</span>
+</span><span class='line'>              <span class="n">Q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span><span class="c1">//把队头元素弹出</span>
+</span><span class='line'>                <span class="c1">//找出与顶点v相连的所有其他顶点，顶点编号放入数组AdjVex中</span>
+</span><span class='line'>              <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">Vexnum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="c1">//把数组AdjVex的值初始化为-1</span>
+</span><span class='line'>              <span class="p">{</span>
+</span><span class='line'>                  <span class="n">AdjVex</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>              <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>              <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="c1">//k表示AdjVex的存放顶点的位置下标</span>
+</span><span class='line'>              <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">Vexnum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="c1">//搜索领接矩阵找出与顶点v连接的其他顶点编号</span>
+</span><span class='line'>              <span class="p">{</span>
+</span><span class='line'>                  <span class="k">if</span><span class="p">(</span><span class="n">Matrix</span><span class="p">[</span><span class="n">u</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>                  <span class="p">{</span>
+</span><span class='line'>                      <span class="n">AdjVex</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">i</span><span class="p">;</span><span class="c1">//把编号放入数组AdjVex的第k个位置，然后k++</span>
+</span><span class='line'>                      <span class="n">k</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>                  <span class="p">}</span>
+</span><span class='line'>              <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>              <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="c1">//i表示AdjVex数组下标</span>
+</span><span class='line'>              <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">Vexnum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="c1">//对u的领接顶点进行遍历</span>
+</span><span class='line'>              <span class="p">{</span>
+</span><span class='line'>                  <span class="n">w</span><span class="o">=</span><span class="n">AdjVex</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="c1">//把AdjVex中的第i个顶点编号放入变量w中</span>
+</span><span class='line'>                  <span class="k">if</span><span class="p">(</span><span class="n">w</span><span class="o">!=-</span><span class="mi">1</span><span class="p">)</span><span class="c1">//如果w不等于-1，则执行循环</span>
+</span><span class='line'>                  <span class="p">{</span>
+</span><span class='line'>                      <span class="k">if</span><span class="p">(</span><span class="n">Visited</span><span class="p">[</span><span class="n">w</span><span class="p">]</span><span class="o">==</span><span class="kc">false</span><span class="p">)</span><span class="c1">//如果顶点w尚未访问</span>
+</span><span class='line'>                      <span class="p">{</span>
+</span><span class='line'>                          <span class="n">Visited</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span><span class="c1">//设置第w个顶点已访问</span>
+</span><span class='line'>                          <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">w</span><span class="o">&lt;&lt;</span><span class="s">&quot; &quot;</span><span class="p">;</span><span class="c1">//输出w和空格，表示该顶点已被访问，并用空格隔开</span>
+</span><span class='line'>                          <span class="n">Q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">w</span><span class="p">);</span><span class="c1">//把w压入队列</span>
+</span><span class='line'>                      <span class="p">}</span>
+</span><span class='line'>                  <span class="p">}</span>
+</span><span class='line'>              <span class="p">}</span>
+</span><span class='line'>          <span class="p">}</span><span class="c1">//while</span>
+</span><span class='line'>      <span class="p">}</span><span class="c1">//if</span>
+</span><span class='line'>  <span class="p">}</span><span class="c1">//for</span>
+</span><span class='line'>  <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">t</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">vnum</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">mx</span><span class="p">[</span><span class="n">MaxLen</span><span class="p">][</span><span class="n">MaxLen</span><span class="p">];</span>
+</span><span class='line'>  <span class="n">Map</span> <span class="n">myMap</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">t</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">for</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">k</span><span class="o">&lt;</span><span class="n">t</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span><span class="c1">//输入图的初始化数据</span>
+</span><span class='line'>      <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">MaxLen</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>          <span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">MaxLen</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>              <span class="n">mx</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">vnum</span><span class="p">;</span>
+</span><span class='line'>      <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">vnum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>          <span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">vnum</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>              <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">mx</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+</span><span class='line'>      <span class="n">myMap</span><span class="p">.</span><span class="n">SetMatrix</span><span class="p">(</span><span class="n">vnum</span><span class="p">,</span><span class="n">mx</span><span class="p">);</span><span class="c1">//设置图的领接矩阵</span>
+</span><span class='line'>      <span class="n">myMap</span><span class="p">.</span><span class="n">BFSTraverse</span><span class="p">();</span><span class="c1">//广度优先遍历</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Data Structure]]></title>
+    <link href="http://iolanthe.github.io/blog/2014/03/17/5/"/>
+    <updated>2014-03-17T00:42:58+08:00</updated>
+    <id>http://iolanthe.github.io/blog/2014/03/17/5</id>
+    <content type="html"><![CDATA[<h1>图应用之最短路径</h1>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'>  <span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">iostream</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span><span class='line'><span class="k">const</span> <span class="kt">int</span> <span class="n">MaxLen</span><span class="o">=</span><span class="mi">20</span><span class="p">;</span><span class="c1">//设置图最多包含20个顶点</span>
+</span><span class='line'><span class="k">const</span> <span class="kt">int</span> <span class="n">MaxDist</span><span class="o">=</span><span class="mi">9999</span><span class="p">;</span><span class="c1">//设距离无穷大为9999</span>
+</span><span class='line'><span class="c1">//---------------图的定义和初始化-----------------</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">Map</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="k">private</span><span class="o">:</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">Matrix</span><span class="p">[</span><span class="n">MaxLen</span><span class="p">][</span><span class="n">MaxLen</span><span class="p">];</span><span class="c1">//图的邻接矩阵</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">Vexnum</span><span class="p">;</span><span class="c1">//图的顶点数量</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">public</span><span class="o">:</span>
+</span><span class='line'>  <span class="kt">void</span> <span class="n">SetMatrix</span><span class="p">(</span><span class="kt">int</span> <span class="n">vnum</span><span class="p">,</span><span class="kt">int</span> <span class="n">mx</span><span class="p">[</span><span class="n">MaxLen</span><span class="p">][</span><span class="n">MaxLen</span><span class="p">]);</span>
+</span><span class='line'>  <span class="kt">void</span> <span class="n">ShortestPath_DIJ</span><span class="p">(</span><span class="kt">int</span> <span class="n">v0</span><span class="p">);</span><span class="c1">//迪杰斯特拉算法求v0到其他顶点的最短路径</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'><span class="c1">//设置邻接矩阵</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">Map</span><span class="o">::</span><span class="n">SetMatrix</span><span class="p">(</span><span class="kt">int</span> <span class="n">vnum</span><span class="p">,</span><span class="kt">int</span> <span class="n">mx</span><span class="p">[</span><span class="n">MaxLen</span><span class="p">][</span><span class="n">MaxLen</span><span class="p">])</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">Vexnum</span> <span class="o">=</span> <span class="n">vnum</span><span class="p">;</span><span class="c1">//设置图的结点数</span>
+</span><span class='line'>  <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">MaxLen</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="c1">//邻接矩阵初始化</span>
+</span><span class='line'>      <span class="k">for</span> <span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">MaxLen</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>          <span class="n">Matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">MaxDist</span><span class="p">;</span><span class="c1">//假设各个顶点之间距离为无穷大</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">Vexnum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="c1">//邻接矩阵接受外来参数</span>
+</span><span class='line'>      <span class="k">for</span> <span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">Vexnum</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="n">Matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">mx</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span><span class="c1">//设置顶点i和j之间的实际距离</span>
+</span><span class='line'>          <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="o">!=</span><span class="n">j</span> <span class="o">&amp;&amp;</span> <span class="n">Matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span><span class="c1">//如果顶点i和j不相等，应该把距离设为无穷大</span>
+</span><span class='line'>              <span class="n">Matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">MaxDist</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="c1">//------------迪杰斯特拉算法求v0到其他顶点的最短路径</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">Map</span><span class="o">::</span><span class="n">ShortestPath_DIJ</span><span class="p">(</span><span class="kt">int</span> <span class="n">v0</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">w</span><span class="p">,</span><span class="n">min</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="o">*</span><span class="n">dist</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">Vexnum</span><span class="p">];</span>
+</span><span class='line'>  <span class="kt">bool</span> <span class="o">*</span><span class="n">final</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">bool</span><span class="p">[</span><span class="n">Vexnum</span><span class="p">];</span><span class="c1">//在求最短路径过程中，标识每个顶点是否被加入集合</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">for</span> <span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">v</span><span class="o">&lt;</span><span class="n">Vexnum</span><span class="p">;</span> <span class="o">++</span><span class="n">v</span><span class="p">)</span> <span class="c1">//初始化final数组的所有值为false,表示所有顶点未加入集合</span>
+</span><span class='line'>      <span class="n">final</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span> 
+</span><span class='line'>
+</span><span class='line'>  <span class="k">for</span> <span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">v</span><span class="o">&lt;</span><span class="n">Vexnum</span><span class="p">;</span> <span class="o">++</span><span class="n">v</span><span class="p">)</span> <span class="c1">//初始化dist数组，表示v0到其他顶点的初始距离</span>
+</span><span class='line'>      <span class="n">dist</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">[</span><span class="n">v0</span><span class="p">][</span><span class="n">v</span><span class="p">];</span><span class="c1">//从邻接矩阵Matrix中读取第v0行的数据，并分别放入dist数组中</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="n">dist</span><span class="p">[</span><span class="n">v0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span><span class="c1">//顶点到自己本身距离为0</span>
+</span><span class='line'>  <span class="n">final</span><span class="p">[</span><span class="n">v0</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span><span class="c1">//v0加入集合，开始搜索</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">Vexnum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="c1">//逐个顶点被选中加入集合</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">min</span><span class="o">=</span><span class="n">MaxDist</span><span class="p">;</span><span class="c1">//初始化min为距离无穷大</span>
+</span><span class='line'>      <span class="k">for</span> <span class="p">(</span><span class="n">w</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">w</span><span class="o">&lt;</span><span class="n">Vexnum</span><span class="p">;</span> <span class="n">w</span><span class="o">++</span><span class="p">)</span><span class="c1">//逐个顶点被选中加入集合</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">final</span><span class="p">[</span><span class="n">w</span><span class="p">])</span><span class="c1">//在未加入集合的顶点中，寻找离v0最近的顶点</span>
+</span><span class='line'>          <span class="p">{</span>
+</span><span class='line'>              <span class="k">if</span> <span class="p">(</span><span class="n">dist</span><span class="p">[</span><span class="n">w</span><span class="p">]</span><span class="o">&lt;</span><span class="n">min</span><span class="p">)</span> <span class="c1">//如果顶点w未加入集合，而且v0到w的距离小于min</span>
+</span><span class='line'>              <span class="p">{</span>
+</span><span class='line'>                  <span class="n">v</span> <span class="o">=</span> <span class="n">w</span><span class="p">;</span>  <span class="c1">//则设置v=w,且min等于v0到w的距离</span>
+</span><span class='line'>                  <span class="n">min</span> <span class="o">=</span> <span class="n">dist</span><span class="p">[</span><span class="n">w</span><span class="p">];</span>
+</span><span class='line'>              <span class="p">}</span>
+</span><span class='line'>          <span class="p">}</span>    
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">final</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span><span class="c1">//找出离v0最近的顶点v后，把v加入集合</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="k">for</span> <span class="p">(</span><span class="n">w</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">w</span><span class="o">&lt;</span><span class="n">Vexnum</span><span class="p">;</span> <span class="n">w</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">{</span><span class="c1">//更新v0到v再到其他顶点w的距离</span>
+</span><span class='line'>          <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">final</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">min</span><span class="o">+</span><span class="n">Matrix</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="n">w</span><span class="p">]</span><span class="o">&lt;</span><span class="n">dist</span><span class="p">[</span><span class="n">w</span><span class="p">]))</span> <span class="c1">//如果顶点w未加入集合，且v0到v再到顶点w的距离小于v0到w的距离</span>
+</span><span class='line'>          <span class="p">{</span>
+</span><span class='line'>              <span class="n">dist</span><span class="p">[</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="n">min</span> <span class="o">+</span> <span class="n">Matrix</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="n">w</span><span class="p">];</span><span class="c1">//则修改v0到w的距离等于v0到v在到顶点的距离</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'> <span class="c1">//搜索完毕</span>
+</span><span class='line'>    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">Vexnum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="c1">//输出v0到其他顶点的最短距离</span>
+</span><span class='line'>        <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">v0</span><span class="o">&lt;&lt;</span><span class="sc">&#39;-&#39;</span><span class="o">&lt;&lt;</span><span class="n">i</span><span class="o">&lt;&lt;</span><span class="sc">&#39;-&#39;</span><span class="o">&lt;&lt;</span><span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">delete</span> <span class="p">[]</span><span class="n">dist</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">delete</span> <span class="p">[]</span><span class="n">final</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span><span class="c1">//ShortestPath_DIJ</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">i</span> <span class="p">,</span><span class="n">j</span> <span class="p">,</span><span class="n">k</span> <span class="p">,</span><span class="n">t</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">vnum</span><span class="p">,</span><span class="n">v0</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">mx</span><span class="p">[</span><span class="n">MaxLen</span><span class="p">][</span><span class="n">MaxLen</span><span class="p">];</span>
+</span><span class='line'>  <span class="n">Map</span> <span class="n">myMap</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">t</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">for</span> <span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">k</span><span class="o">&lt;</span><span class="n">t</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>   <span class="c1">//输入图的初始化数据</span>
+</span><span class='line'>      <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">MaxLen</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>          <span class="k">for</span> <span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">MaxLen</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>              <span class="n">mx</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>      
+</span><span class='line'>      <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">vnum</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">vnum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>          <span class="k">for</span> <span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">vnum</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>              <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">mx</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">myMap</span><span class="p">.</span><span class="n">SetMatrix</span><span class="p">(</span><span class="n">vnum</span><span class="p">,</span><span class="n">mx</span><span class="p">);</span><span class="c1">//设置图的邻接矩阵</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">v0</span><span class="p">;</span><span class="c1">//输入起点</span>
+</span><span class='line'>      <span class="n">myMap</span><span class="p">.</span><span class="n">ShortestPath_DIJ</span><span class="p">(</span><span class="n">v0</span><span class="p">);</span><span class="c1">//迪杰斯特拉算法求V0到其他顶点的最短路径</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Data Structure]]></title>
+    <link href="http://iolanthe.github.io/blog/2014/03/16/the-fourth-blog/"/>
+    <updated>2014-03-16T21:53:03+08:00</updated>
+    <id>http://iolanthe.github.io/blog/2014/03/16/the-fourth-blog</id>
+    <content type="html"><![CDATA[<h1>图深度优先搜索算法</h1>
+
+<p>哈哈哈</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span><span class='line'><span class="c1">//-------图的定义和初始化-----------</span>
+</span><span class='line'><span class="k">const</span> <span class="kt">int</span> <span class="n">MaxLen</span><span class="o">=</span><span class="mi">20</span><span class="p">;</span><span class="c1">//设定图最多包含20个顶点</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Map</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="k">private</span><span class="o">:</span>
+</span><span class='line'>  <span class="kt">bool</span> <span class="n">Visited</span><span class="p">[</span><span class="n">MaxLen</span><span class="p">];</span><span class="c1">//访问标识数组，标识每个顶点是否已访问</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">Matrix</span><span class="p">[</span><span class="n">MaxLen</span><span class="p">][</span><span class="n">MaxLen</span><span class="p">];</span><span class="c1">//图的领接矩阵</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">Vexnum</span><span class="p">;</span><span class="c1">//图的顶点数量</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="kt">void</span> <span class="n">DFS</span><span class="p">(</span><span class="kt">int</span> <span class="n">v</span><span class="p">);</span><span class="c1">//深度优先，私有函数，内部调用</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">public</span><span class="o">:</span>
+</span><span class='line'>  <span class="kt">void</span> <span class="n">SetMatrix</span><span class="p">(</span><span class="kt">int</span> <span class="n">vnum</span><span class="p">,</span><span class="kt">int</span> <span class="n">mx</span><span class="p">[</span><span class="n">MaxLen</span><span class="p">][</span><span class="n">MaxLen</span><span class="p">]);</span>
+</span><span class='line'>  <span class="kt">void</span> <span class="n">DFSTraverse</span><span class="p">();</span><span class="c1">//公有含糊，被main调用</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'><span class="c1">//设置领接矩阵</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">Map</span><span class="o">::</span><span class="n">SetMatrix</span><span class="p">(</span><span class="kt">int</span> <span class="n">vnum</span><span class="p">,</span><span class="kt">int</span> <span class="n">mx</span><span class="p">[</span><span class="n">MaxLen</span><span class="p">][</span><span class="n">MaxLen</span><span class="p">])</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">Vexnum</span> <span class="o">=</span> <span class="n">vnum</span><span class="p">;</span><span class="c1">//设置图的结点数</span>
+</span><span class='line'>  <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">MaxLen</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="c1">//领接矩阵初始化为0</span>
+</span><span class='line'>      <span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">MaxLen</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>          <span class="n">Matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">Vexnum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="c1">//领接矩阵初始化</span>
+</span><span class='line'>      <span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">Vexnum</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>          <span class="n">Matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">mx</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="c1">//--------------深度优先遍历函数-----------</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">Map</span><span class="o">::</span><span class="n">DFSTraverse</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span><span class="c1">//对图g作深度优先遍历，公有函数</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">v</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">for</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">v</span><span class="o">&lt;</span><span class="n">Vexnum</span><span class="p">;</span> <span class="o">++</span><span class="n">v</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">Visited</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span><span class="c1">//把访问标识数组的值全部设为false</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">for</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">v</span><span class="o">&lt;</span><span class="n">Vexnum</span><span class="p">;</span> <span class="o">++</span><span class="n">v</span><span class="p">)</span><span class="c1">//从v=0开始，对所有的顶点进行检查</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">if</span><span class="p">(</span><span class="n">Visited</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">==</span> <span class="kc">false</span><span class="p">)</span><span class="c1">//如果该顶点未被访问，则调用DFS函数进行深度优先搜索</span>
+</span><span class='line'>          <span class="n">DFS</span><span class="p">(</span><span class="n">v</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="c1">//深度优先搜索</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">Map</span><span class="o">::</span><span class="n">DFS</span><span class="p">(</span><span class="kt">int</span> <span class="n">v</span><span class="p">)</span><span class="c1">//从第v个顶点出发递归的深度优先遍历图G</span>
+</span><span class='line'><span class="p">{</span><span class="c1">//私有函数，v表示当前顶点</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">w</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">;</span>
+</span><span class='line'><span class="c1">//先对顶点v进行访问</span>
+</span><span class='line'>  <span class="n">Visited</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span><span class="c1">//设置visit数组的第v个位置为true，表示已访问</span>
+</span><span class='line'>  <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">v</span><span class="o">&lt;&lt;</span><span class="s">&quot; &quot;</span><span class="p">;</span><span class="c1">//输出数值v再输出一个空格，表示当前顶点已访问，并用空格隔开</span>
+</span><span class='line'><span class="c1">//找出与v相连接的其他所有顶点</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="o">*</span><span class="n">AdjVex</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">Vexnum</span><span class="p">];</span><span class="c1">//存放v连接的顶点编号</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">Vexnum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="c1">//把数组AdjVex的值初始化为-1</span>
+</span><span class='line'>      <span class="n">AdjVex</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=-</span><span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="c1">//k表示AdjVex的实际使用长度，也就是和v连接的顶点数量</span>
+</span><span class='line'>  <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">Vexnum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="c1">//搜索领接矩阵找出与顶点v连接的其他顶点编号</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">if</span><span class="p">(</span><span class="n">Matrix</span><span class="p">[</span><span class="n">v</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span><span class="c1">//如果顶点i与顶点v连接，那么领接矩阵的第v行第i个位置的值为1</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="n">AdjVex</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="n">i</span><span class="p">;</span><span class="c1">//如果找到i与v连接，那么把i放入数组AdjVex的第k个位置，然后k++</span>
+</span><span class='line'>          <span class="n">k</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">Vexnum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="c1">//对v的领接顶点进行深度优先遍历</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">w</span><span class="o">=</span><span class="n">AdjVex</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="c1">//把AdjVex中的第i个顶点编号放入变量w中</span>
+</span><span class='line'>      <span class="k">if</span><span class="p">(</span><span class="n">w</span><span class="o">!=-</span><span class="mi">1</span><span class="p">)</span><span class="c1">//如果w不等于-1，则说明还有与v相连的顶点，继续循环</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="k">if</span><span class="p">(</span><span class="n">Visited</span><span class="p">[</span><span class="n">w</span><span class="p">]</span><span class="o">==</span><span class="kc">false</span><span class="p">)</span><span class="c1">//如果顶点w尚未访问，对w调用DFS函数进行遍历</span>
+</span><span class='line'>              <span class="n">DFS</span><span class="p">(</span><span class="n">w</span><span class="p">);</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">delete</span> <span class="p">[]</span><span class="n">AdjVex</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">t</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">vnum</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">mx</span><span class="p">[</span><span class="n">MaxLen</span><span class="p">][</span><span class="n">MaxLen</span><span class="p">];</span>
+</span><span class='line'>  <span class="n">Map</span> <span class="n">myMap</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">t</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">for</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">k</span><span class="o">&lt;</span><span class="n">t</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">MaxLen</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="c1">//输入图的初始化数据</span>
+</span><span class='line'>          <span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">MaxLen</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>              <span class="n">mx</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">vnum</span><span class="p">;</span>
+</span><span class='line'>      <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">vnum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>          <span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">vnum</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>              <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">mx</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+</span><span class='line'>      <span class="n">myMap</span><span class="p">.</span><span class="n">SetMatrix</span><span class="p">(</span><span class="n">vnum</span><span class="p">,</span><span class="n">mx</span><span class="p">);</span><span class="c1">//设置图的领接矩阵</span>
+</span><span class='line'>      <span class="n">myMap</span><span class="p">.</span><span class="n">DFSTraverse</span><span class="p">();</span><span class="c1">//深度优先遍历</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>   <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Data Structure]]></title>
+    <link href="http://iolanthe.github.io/blog/2014/03/16/my-third-blog/"/>
+    <updated>2014-03-16T16:50:42+08:00</updated>
+    <id>http://iolanthe.github.io/blog/2014/03/16/my-third-blog</id>
+    <content type="html"><![CDATA[<h1>赫夫曼编码</h1>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+<span class='line-number'>130</span>
+<span class='line-number'>131</span>
+<span class='line-number'>132</span>
+<span class='line-number'>133</span>
+<span class='line-number'>134</span>
+<span class='line-number'>135</span>
+<span class='line-number'>136</span>
+<span class='line-number'>137</span>
+<span class='line-number'>138</span>
+<span class='line-number'>139</span>
+<span class='line-number'>140</span>
+<span class='line-number'>141</span>
+<span class='line-number'>142</span>
+<span class='line-number'>143</span>
+<span class='line-number'>144</span>
+<span class='line-number'>145</span>
+<span class='line-number'>146</span>
+<span class='line-number'>147</span>
+<span class='line-number'>148</span>
+<span class='line-number'>149</span>
+<span class='line-number'>150</span>
+<span class='line-number'>151</span>
+<span class='line-number'>152</span>
+<span class='line-number'>153</span>
+<span class='line-number'>154</span>
+<span class='line-number'>155</span>
+<span class='line-number'>156</span>
+</pre></td><td class='code'><pre><code class='c++'><span class='line'>   <span class="c1">//-----------赫夫曼树和结点定义----------</span>
+</span><span class='line'><span class="cp">#include &lt;iostream&gt;</span>
+</span><span class='line'><span class="cp">#include &lt;string&gt;</span>
+</span><span class='line'><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">const</span> <span class="kt">int</span> <span class="n">MaxW</span> <span class="o">=</span> <span class="mi">99999</span><span class="p">;</span><span class="c1">//假设结点权值不超过99999</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">HuffNode</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="k">public</span><span class="o">:</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">weight</span><span class="p">;</span><span class="c1">//权值</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">parent</span><span class="p">;</span><span class="c1">//父节点下标</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">leftchild</span><span class="p">;</span><span class="c1">//左孩子下标</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">rightchild</span><span class="p">;</span><span class="c1">//右孩子下标</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'><span class="c1">//定义哈夫曼树类</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">HuffMan</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="k">private</span><span class="o">:</span>
+</span><span class='line'>  <span class="kt">void</span> <span class="n">MakeTree</span> <span class="p">();</span><span class="c1">//建树，私有函数，被公有函数调用</span>
+</span><span class='line'>  <span class="kt">void</span> <span class="n">SelectMin</span> <span class="p">(</span> <span class="kt">int</span> <span class="n">pos</span><span class="p">,</span><span class="kt">int</span> <span class="o">*</span><span class="n">s1</span><span class="p">,</span><span class="kt">int</span> <span class="o">*</span><span class="n">s2</span> <span class="p">);</span>
+</span><span class='line'><span class="k">public</span><span class="o">:</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">len</span><span class="p">;</span><span class="c1">//结点数量</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">lnum</span><span class="p">;</span><span class="c1">//叶子数量</span>
+</span><span class='line'>  <span class="n">HuffNode</span> <span class="o">*</span><span class="n">huffTree</span><span class="p">;</span><span class="c1">//赫夫曼树，用数组表示</span>
+</span><span class='line'>  <span class="n">string</span> <span class="o">*</span><span class="n">huffCode</span><span class="p">;</span><span class="c1">//每个字符对应的赫夫曼编码</span>
+</span><span class='line'>  <span class="kt">void</span> <span class="n">MakeTree</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span><span class="kt">int</span> <span class="n">wt</span><span class="p">[]);</span><span class="c1">//公有函数，被main调用</span>
+</span><span class='line'>  <span class="kt">void</span> <span class="n">Coding</span><span class="p">();</span><span class="c1">//公有函数，被main调用</span>
+</span><span class='line'>  <span class="kt">void</span> <span class="n">Destory</span><span class="p">();</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'><span class="c1">//-----------构建huffman树--------------</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">HuffMan</span><span class="o">::</span><span class="n">MakeTree</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span><span class="kt">int</span> <span class="n">wt</span><span class="p">[])</span><span class="c1">//参数是叶子结点数和叶子权值</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'><span class="c1">//公有函数，对外接口，被main函数调用</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">lnum</span><span class="o">=</span><span class="n">n</span><span class="p">;</span><span class="c1">//设置lnum的值为叶子数量</span>
+</span><span class='line'>  <span class="n">len</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span><span class="c1">//设置len的值为叶子数量*2-1</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">huffCode</span> <span class="o">=</span> <span class="k">new</span> <span class="n">string</span><span class="p">[</span><span class="n">lnum</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span><span class="c1">//位置从1开始计算</span>
+</span><span class='line'>  <span class="c1">//huffCode实质是个二维字符数组，第i行表示第i个字符对应的编码</span>
+</span><span class='line'>  <span class="n">huffTree</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HuffNode</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="p">];</span>
+</span><span class='line'>    <span class="c1">//赫夫曼树huffTree初始化</span>
+</span><span class='line'>  <span class="k">for</span><span class="p">(</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">len</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="c1">//把huffman前n个结点的权值设为wt的权值，从1开始编号</span>
+</span><span class='line'>  <span class="n">huffTree</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">weight</span><span class="o">=</span><span class="n">wt</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'>  
+</span><span class='line'>
+</span><span class='line'>  <span class="k">for</span><span class="p">(</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">len</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">if</span><span class="p">(</span><span class="n">i</span><span class="o">&gt;</span><span class="n">n</span><span class="p">)</span> <span class="n">huffTree</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">weight</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span><span class="c1">//前n个结点是叶子已经设值</span>
+</span><span class='line'>      <span class="n">huffTree</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">parent</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">huffTree</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">leftchild</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>      <span class="n">huffTree</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">rightchild</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="n">MakeTree</span><span class="p">();</span><span class="c1">//调用私有函数建树</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">void</span> <span class="n">HuffMan</span><span class="o">::</span><span class="n">SelectMin</span><span class="p">(</span><span class="kt">int</span> <span class="n">pos</span><span class="p">,</span><span class="kt">int</span> <span class="o">*</span><span class="n">s1</span><span class="p">,</span><span class="kt">int</span> <span class="o">*</span><span class="n">s2</span><span class="p">)</span>
+</span><span class='line'><span class="c1">//找出的下标会保存在s1和s2中</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">w1</span><span class="p">,</span><span class="n">w2</span><span class="p">,</span><span class="n">i</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">w1</span><span class="o">=</span><span class="n">w2</span><span class="o">=</span><span class="n">MaxW</span><span class="p">;</span><span class="c1">//初始化w1和w2为最大值，在比较中会被实际的权值替换</span>
+</span><span class='line'>  <span class="o">*</span><span class="n">s1</span> <span class="o">=</span> <span class="o">*</span><span class="n">s2</span> <span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">pos</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="k">if</span><span class="p">(</span><span class="n">huffTree</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">weight</span> <span class="o">&lt;</span> <span class="n">w1</span> <span class="o">&amp;&amp;</span> <span class="n">huffTree</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">parent</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="n">w2</span> <span class="o">=</span> <span class="n">w1</span><span class="p">;</span>
+</span><span class='line'>          <span class="o">*</span><span class="n">s2</span> <span class="o">=</span> <span class="o">*</span><span class="n">s1</span><span class="p">;</span>
+</span><span class='line'>          <span class="n">w1</span> <span class="o">=</span> <span class="n">huffTree</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">weight</span><span class="p">;</span>
+</span><span class='line'>          <span class="o">*</span><span class="n">s1</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">huffTree</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">weight</span> <span class="o">&lt;</span> <span class="n">w2</span> <span class="o">&amp;&amp;</span> <span class="n">huffTree</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">parent</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="n">w2</span> <span class="o">=</span> <span class="n">huffTree</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">weight</span><span class="p">;</span>
+</span><span class='line'>          <span class="o">*</span><span class="n">s2</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="c1">//--------建树与销毁函数-----------</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">HuffMan</span><span class="o">::</span><span class="n">MakeTree</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span><span class="c1">//私有函数，被公有函数调用</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span><span class="n">s1</span><span class="p">,</span><span class="n">s2</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">lnum</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;=</span><span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">SelectMin</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">&amp;</span><span class="n">s1</span><span class="p">,</span><span class="o">&amp;</span><span class="n">s2</span><span class="p">);</span><span class="c1">//找出的下标值会放入s1和s2中</span>
+</span><span class='line'>      <span class="c1">//设置s1和s2的父亲，并作相关修改</span>
+</span><span class='line'>      <span class="n">huffTree</span><span class="p">[</span><span class="n">s1</span><span class="p">].</span><span class="n">parent</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="c1">//设置s1的父亲 </span>
+</span><span class='line'>      <span class="n">huffTree</span><span class="p">[</span><span class="n">s2</span><span class="p">].</span><span class="n">parent</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span><span class="c1">//设置s2的父亲</span>
+</span><span class='line'>      <span class="n">huffTree</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">weight</span> <span class="o">=</span> <span class="n">huffTree</span><span class="p">[</span><span class="n">s1</span><span class="p">].</span><span class="n">weight</span> <span class="o">+</span> <span class="n">huffTree</span><span class="p">[</span><span class="n">s2</span><span class="p">].</span><span class="n">weight</span><span class="p">;</span><span class="c1">//设置父亲的权值</span>
+</span><span class='line'>      <span class="n">huffTree</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">leftchild</span> <span class="o">=</span> <span class="n">s1</span><span class="p">;</span>  <span class="c1">//设置父亲的左孩子</span>
+</span><span class='line'>      <span class="n">huffTree</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">rightchild</span> <span class="o">=</span> <span class="n">s2</span><span class="p">;</span><span class="c1">//设置父亲的右孩子</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="c1">//销毁赫夫曼树</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">HuffMan</span><span class="o">::</span><span class="n">Destory</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="n">len</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">lnum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">delete</span> <span class="p">[]</span><span class="n">huffTree</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">delete</span> <span class="p">[]</span><span class="n">huffCode</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="c1">//-------------赫夫曼编码------------</span>
+</span><span class='line'><span class="kt">void</span> <span class="n">HuffMan</span><span class="o">::</span><span class="n">Coding</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="kt">char</span> <span class="o">*</span><span class="n">cd</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">start</span><span class="p">;</span>
+</span><span class='line'><span class="c1">//求n个叶结点的哈夫曼编码</span>
+</span><span class='line'>  <span class="n">cd</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">lnum</span><span class="p">];</span><span class="c1">//cd是临时字符串，临时保存每个字符的编码</span>
+</span><span class='line'>  <span class="n">cd</span><span class="p">[</span><span class="n">lnum</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span><span class="c1">//编码结束符</span>
+</span><span class='line'>  <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">lnum</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="c1">//逐个字符求哈夫曼编码</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">start</span> <span class="o">=</span> <span class="n">lnum</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span><span class="c1">//编码结束符位置</span>
+</span><span class='line'>      <span class="n">c</span><span class="o">=</span><span class="n">i</span><span class="p">;</span><span class="c1">//当前结点</span>
+</span><span class='line'>      <span class="n">f</span><span class="o">=</span><span class="n">huffTree</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">parent</span><span class="p">;</span><span class="c1">//当前节点的父亲</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">//从叶子到根逆向求编码</span>
+</span><span class='line'>      <span class="k">while</span><span class="p">(</span><span class="n">f</span><span class="o">!=</span><span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">{</span><span class="c1">//如果父亲f的左孩子等于c,则编码取0，这里包含2行代码</span>
+</span><span class='line'>          <span class="k">if</span> <span class="p">(</span><span class="n">huffTree</span><span class="p">[</span><span class="n">f</span><span class="p">].</span><span class="n">leftchild</span><span class="o">==</span><span class="n">c</span><span class="p">)</span>
+</span><span class='line'>              <span class="n">cd</span><span class="p">[</span><span class="o">--</span><span class="n">start</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;0&#39;</span><span class="p">;</span>
+</span><span class='line'>          <span class="k">else</span> <span class="n">cd</span><span class="p">[</span><span class="o">--</span><span class="n">start</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;1&#39;</span><span class="p">;</span><span class="c1">//否则，编码取1</span>
+</span><span class='line'>          <span class="n">c</span> <span class="o">=</span> <span class="n">f</span><span class="p">;</span><span class="c1">//c指向父亲</span>
+</span><span class='line'>          <span class="n">f</span> <span class="o">=</span> <span class="n">huffTree</span><span class="p">[</span><span class="n">f</span><span class="p">].</span><span class="n">parent</span><span class="p">;</span><span class="c1">//f指向上一层父亲</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="c1">//把cd中从start到末尾的编码复制到huffCode中</span>
+</span><span class='line'>      <span class="n">huffCode</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">assign</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cd</span><span class="p">[</span><span class="n">start</span><span class="p">]);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">delete</span> <span class="p">[]</span><span class="n">cd</span><span class="p">;</span><span class="c1">//释放工作空间</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//-------------------主函数------------</span>
+</span><span class='line'><span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">t</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">;</span>
+</span><span class='line'>  <span class="kt">int</span> <span class="n">wt</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span>
+</span><span class='line'>  <span class="n">HuffMan</span> <span class="n">myHuff</span><span class="p">;</span>
+</span><span class='line'>  <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">t</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">t</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">n</span><span class="p">;</span>
+</span><span class='line'>      <span class="k">for</span> <span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>          <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">wt</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+</span><span class='line'>      <span class="n">myHuff</span><span class="p">.</span><span class="n">MakeTree</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">wt</span><span class="p">);</span><span class="c1">//建树</span>
+</span><span class='line'>      <span class="n">myHuff</span><span class="p">.</span><span class="n">Coding</span><span class="p">();</span><span class="c1">//编码</span>
+</span><span class='line'>      <span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;=</span><span class="n">n</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
+</span><span class='line'>      <span class="p">{</span>
+</span><span class='line'>          <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">myHuff</span><span class="p">.</span><span class="n">huffTree</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">weight</span><span class="o">&lt;&lt;</span><span class="sc">&#39;-&#39;</span><span class="p">;</span><span class="c1">//输出各权值</span>
+</span><span class='line'>          <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">myHuff</span><span class="p">.</span><span class="n">huffCode</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span><span class="c1">//输出各编码</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>      <span class="n">myHuff</span><span class="p">.</span><span class="n">Destory</span><span class="p">();</span><span class="c1">//销毁</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[PYTHON]]></title>
+    <link href="http://iolanthe.github.io/blog/2014/03/16/the-second/"/>
+    <updated>2014-03-16T15:31:37+08:00</updated>
+    <id>http://iolanthe.github.io/blog/2014/03/16/the-second</id>
+    <content type="html"><![CDATA[<h1>This is my second blog</h1>
+
+<p>呵呵呵呵</p>
+
+<p>··· python</p>
+
+<pre><code>import web
+print “goodbye world”
+</code></pre>
+
+<p>···</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[THE FIRST]]></title>
+    <link href="http://iolanthe.github.io/blog/2014/03/15/iolanthe/"/>
+    <updated>2014-03-15T22:03:54+08:00</updated>
+    <id>http://iolanthe.github.io/blog/2014/03/15/iolanthe</id>
+    <content type="html"><![CDATA[<h1>This is my blog</h1>
+
+<p>哈哈哈哈</p>
+
+<p>··· python</p>
+
+<pre><code>import web
+print “hello world”
+</code></pre>
+
+<p>···</p>
+]]></content>
+  </entry>
+  
+</feed>
