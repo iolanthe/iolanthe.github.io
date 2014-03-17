@@ -1,0 +1,13 @@
+---
+layout: post
+title: "6"
+date: 2014-03-17 11:32:37 +0800
+comments: true
+categories: 
+---
+
+
+
+#this is my sixth blog
+
+哈哈哈
