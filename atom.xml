@@ -4,7 +4,7 @@
   <title><![CDATA[ianthe's]]></title>
   <link href="http://iolanthe.github.io/atom.xml" rel="self"/>
   <link href="http://iolanthe.github.io/"/>
-  <updated>2014-03-17T23:56:46+08:00</updated>
+  <updated>2014-03-18T00:35:33+08:00</updated>
   <id>http://iolanthe.github.io/</id>
   <author>
     <name><![CDATA[iolanthe]]></name>
@@ -1356,44 +1356,6 @@
 
 
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[PYTHON]]></title>
-    <link href="http://iolanthe.github.io/blog/2014/03/16/the-second/"/>
-    <updated>2014-03-16T15:31:37+08:00</updated>
-    <id>http://iolanthe.github.io/blog/2014/03/16/the-second</id>
-    <content type="html"><![CDATA[<h1>This is my second blog</h1>
-
-<p>呵呵呵呵</p>
-
-<p>··· python</p>
-
-<pre><code>import web
-print “goodbye world”
-</code></pre>
-
-<p>···</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[THE FIRST]]></title>
-    <link href="http://iolanthe.github.io/blog/2014/03/15/iolanthe/"/>
-    <updated>2014-03-15T22:03:54+08:00</updated>
-    <id>http://iolanthe.github.io/blog/2014/03/15/iolanthe</id>
-    <content type="html"><![CDATA[<h1>This is my blog</h1>
-
-<p>哈哈哈哈</p>
-
-<p>··· python</p>
-
-<pre><code>import web
-print “hello world”
-</code></pre>
-
-<p>···</p>
 ]]></content>
   </entry>
   
