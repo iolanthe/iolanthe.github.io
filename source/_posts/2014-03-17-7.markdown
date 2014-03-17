@@ -1,0 +1,156 @@
+---
+layout: post
+title: "Data Structure"
+date: 2014-03-17 22:55:09 +0800
+comments: true
+categories: 
+---
+
+#顺序表
+
+```c++
+#include <iostream>
+using namespace std;
+
+#define ok 0
+#define error -1
+//---------顺序表类定义--------------
+class SeqList{
+private:
+	int *list;//元素数组
+	int maxsize;//顺序表最大长度
+	int size;	//顺序表实际长度
+public:
+	SeqList(int max=0);//构造函数
+	~SeqList();		//析构函数
+	int list_size();//获取顺序表实际长度
+	int list_insert(int item,int i);//插入一个元素，参数是插入的数值和位置
+	int list_del(int i);//删除一个元素，参数是删除的位置
+	int list_get(int i);//获取一个元素，参数是获取的位置
+};
+//-------顺序表的创建，回收和获取实际长度-------
+SeqList::SeqList(int max){//构造函数，对象初始化设定
+	maxsize = max;
+	size = 0;
+	list = new int[maxsize];
+}
+
+SeqList::~SeqList(){//析构函数
+	delete []list;//回收空间
+}
+
+int SeqList::list_size(){//获取顺序表实际长度
+	return size;
+}
+//-------顺序表的插入操作-----------
+int SeqList::list_insert(int item,int i){//在指定位置插入一个元素item
+	int p,q;
+	if (size == maxsize){//检查顺序表是否已满
+		return error;
+	}
+	if (i<1 || i>size+1){	//检查是否位置越界
+		return error;
+	}
+	q = i-1;
+	for (p=size-1; p>=q; --p)	//位置i及后面的元素全部后移一位
+		list[p+1] = list[p];
+	list[q] = item;
+
+	size++;
+
+	return ok;
+}
+//--------顺序表的删除和获取操作-------------
+int SeqList::list_del(int i){//在指定位置删除一个元素，返回删除的元素值
+	int p,q,temp;
+	if (size == 0){//检查顺序表是否已空
+		return error;
+	}
+	if (i<1 || i>size){//检查是否位置越界
+		return error;
+	}
+	p = i-1;
+	temp = list[i-1];
+	q = size-1;
+	for (++p;p<=q;++p)//位置i后面的元素全部前移一位，覆盖掉位置i
+		list[p-1] = list[p];
+	size--;
+	return temp;
+}
+
+int SeqList::list_get(int i){//获取指定位置i的元素值
+	if (i<1 || i>size){//检查是否位置越界
+		return error;
+	}
+	return list[i-1];
+}
+//-----主程序1------
+int main(){
+
+	int i,temp;
+	SeqList mylist(100);//创建一个顺序表，最大长度100
+	int len,item,inspos,delpos,getpos;//一系列参数定义
+//创建顺序表
+	cin>>len;//输入顺序表长度
+	for (i=1;i<=len;i++){//输入一行顺序表初始数据
+		cin>>temp;
+		mylist.list_insert(temp,i);//创建顺序表
+	}
+	for (i=1;i<=mylist.list_size();i++)//输出创建后的结果
+		cout<<mylist.list_get(i)<<" ";
+	cout<<endl;
+//插入新的数据
+	cin>>item>>inspos;//输入新的数据和位置
+	mylist.list_insert(item,inspos);
+	for (i=1;i<=mylist.list_size();i++)//输出插入后的结果
+		cout<<mylist.list_get(i)<<" ";
+	cout<<endl;
+//删除指定位置的数据
+	cin>>delpos;//输入删除位置
+	mylist.list_del(delpos);
+	for (i=1;i<=mylist.list_size();i++)//输出删除后的结果
+		cout<<mylist.list_get(i)<<" ";
+	cout<<endl;
+//获取指定位置的数据
+	cin>>getpos;//输入查找位置
+	cout<<mylist.list_get(getpos);
+	cout<<endl;
+
+	return 0;
+}
+//----主程序2-----
+int main(){
+
+	int i,temp,temp2,temp1;
+	SeqList mylist(100);
+	int len,getpos1,getpos2;
+
+	cin>>len;
+	for (i=1;i<=len;i++){
+		cin>>temp;
+		mylist.list_insert(temp,i);
+	}
+	for (i=1;i<=mylist.list_size();i++)
+		cout<<mylist.list_get(i)<<" ";
+	cout<<endl;
+
+    cin>>getpos1>>getpos2;//交换输入位置的值
+	if (getpos1>0 && getpos2<=mylist.list_size())
+	{
+	temp1=mylist.list_get(getpos1);
+	temp2=mylist.list_get(getpos2);
+	mylist.list_del(getpos1);
+	mylist.list_insert(temp2,getpos1);
+    mylist.list_del(getpos2);
+	mylist.list_insert(temp1,getpos2);
+	for (i=1;i<=mylist.list_size();i++)
+		cout<<mylist.list_get(i)<<" ";
+	cout<<endl;
+	}
+	else 
+		cout<<"error";
+
+	return 0;
+}
+
+```
