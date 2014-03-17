@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "the second"
+title: "PYTHON"
 date: 2014-03-16 15:31:37 +0800
 comments: true
 categories: 
