@@ -1,0 +1,330 @@
+---
+layout: post
+title: "Data Strkcture "
+date: 2014-03-18 01:03:51 +0800
+comments: true
+categories: 
+---
+
+#单链表
+```c++
+#include <iostream>
+using namespace std;
+
+#define ok 0
+#define error -1
+//链表结点类定义
+class ListNode
+{
+public:
+	int data;
+	ListNode * next;
+	ListNode (ListNode * ptrNext = NULL) {
+		next = ptrNext;
+	}
+	ListNode(int item, ListNode *ptrNext = NULL){
+		data = item;
+		next = ptrNext;
+	}
+	~ListNode(void) {}
+};
+//-------带头结点的单链表类定义-----------
+//单链表的头结点的数据域存储链表长度，即不含头结点的其他元素结点
+class LinkList
+{
+private:
+	ListNode * head;
+	int len;
+	ListNode * index(int i);//返回第i个结点的指针，如果不存在返回NULL
+
+public:
+	LinkList();//构造函数
+	~LinkList();//析构函数
+	int LL_len();//获取单链表含数据元素的个数，不包含头结点
+	int LL_get(int i);//获取第i个元素的数据
+	int LL_insert(int item,int i);//把数值item插入第i个位置
+	int LL_del(int i);//删除第i个元素
+};
+//-----单链表的创建与回收------
+LinkList::LinkList()//链表回收，要逐个结点回收
+{
+	head = new ListNode();
+	len = 0;
+}
+
+LinkList::~LinkList()
+{
+	ListNode *p,*q;
+	p=head;
+	while (p != NULL){
+		q=p;
+		p=p->next;
+		delete q;
+	}
+	len=0;
+	head = NULL;
+}
+//----单链表的定位，长度，查找----
+ListNode * LinkList::index(int i)//定位函数，返回第i个结点的指针
+//元素结点位置从11开始，头结点位置为0，定位失败会返回NULL
+{
+	if (i<0 || i>len){//定位越界
+		return NULL;
+	}
+	if (i==0) return head;//i为0则返回头指针
+	ListNode *p = head->next;
+	int j=1;
+	while (p && j<i){
+		p = p->next;
+		++j;
+	}
+	return p;
+}
+
+int LinkList::LL_len()//获取单链表的长度
+{
+	return len;
+}
+
+int LinkList::LL_get(int i)
+{//获取第i个节点的数据
+	if (i<1 || i>len){//位置越界
+		return error;
+	}
+	ListNode *p=index(i);//定位到第i个结点
+	return p->data;
+}
+//----单链表的插入和删除---
+int LinkList::LL_insert(int item, int i)
+{//在第i个位置插入新数据
+	if (i<1 || i>len+1){//位置len+1表示插入表尾，位置1表示插入表头
+		return error;
+	}
+	ListNode *p = index(i-1);//定位到第i-1个结点
+	ListNode *q = new ListNode(item, p->next);//创建新的结点，获取指定数据，将前一结点的next指针改为自己的next指针
+	p->next = q;//第i-1结点指向新插入结点
+	len++;
+	return ok;
+}
+
+int LinkList::LL_del(int i)
+{//删除第i个结点
+	if (len == 0){//空链表，无法删除
+		return error;
+	}
+	if (i<1 || i>len){
+		return error;
+	}
+	ListNode *s, *p=index(i-1);//定位到第i-1个结点
+	s = p->next;//s定位到要删除的结点
+	p->next = p->next->next;//第i-1号结点的next指针指向第i+1号结点
+	int temp = s->data;//获取要删除结点包含的数据
+	delete s;//删除指定结点
+	len--;
+	return temp;//返回删除结点的数据
+}
+//-------主函数-----------
+int main()
+{
+	int i,k,temp;
+	LinkList sl;
+//创建单链表
+	cin>>k;
+	for(i=1; i<=k; i++){
+		cin>>temp;
+		sl.LL_insert(temp,i);
+	}
+	for(i=1; i<=sl.LL_len(); i++)//输出单链表的结果
+		cout<<sl.LL_get(i)<<" ";
+	cout<<endl;
+
+//单链表的插入
+	cin>>temp>>k;//输入插入的数据和位置
+	sl.LL_insert(temp,k);
+	for(i=1; i<=sl.LL_len(); i++)//输出单链表的结果
+		cout<<sl.LL_get(i)<<" ";
+	cout<<endl;
+
+//单链表的删除
+	cin>>k;   //输入删除的位置
+	sl.LL_del(k);
+	for(i=1; i<=sl.LL_len(); i++)
+		cout<<sl.LL_get(i)<<" ";//输出单链表的结果
+	cout<<endl;
+
+//单链表的查找
+	cin>>k;   //输入获取的位置
+	cout<<sl.LL_get(k)<<endl;
+
+	return 0;
+}
+
+
+
+#include <iostream>
+using namespace std;
+
+#define ok 0
+#define error -1
+
+class ListNode
+{
+public:
+	int data;
+	ListNode * next;
+	ListNode (ListNode * ptrNext = NULL) {
+		next = ptrNext;
+	}
+	ListNode(int item, ListNode *ptrNext = NULL){
+		data = item;
+		next = ptrNext;
+	}
+	~ListNode(void) {}
+};
+
+class LinkList
+{
+private:
+	ListNode * head;
+	int len;
+	ListNode * index(int i);
+
+public:
+	LinkList();
+	~LinkList();
+	int LL_len();
+	int LL_get(int i);
+	int LL_insert(int item,int i);
+	int LL_del(int i);
+	int LL_change(int i,int j);
+};
+
+LinkList::LinkList()
+{
+	head = new ListNode();
+	len = 0;
+}
+
+LinkList::~LinkList()
+{
+	ListNode *p,*q;
+	p=head;
+	while (p != NULL){
+		q=p;
+		p=p->next;
+		delete q;
+	}
+	len=0;
+	head = NULL;
+}
+
+ListNode * LinkList::index(int i)
+{
+	if (i<0 || i>len){
+		return NULL;
+	}
+	if (i==0) return head;
+	ListNode *p = head->next;
+	int j=1;
+	while (p && j<i){
+		p = p->next;
+		++j;
+	}
+	return p;
+}
+
+int LinkList::LL_len()
+{
+	return len;
+}
+
+int LinkList::LL_get(int i)
+{
+	if (i<1 || i>len){
+		return error;
+	}
+	ListNode *p=index(i);
+	return p->data;
+}
+
+int LinkList::LL_insert(int item, int i)
+{
+	if (i<1 || i>len+1){
+		return error;
+	}
+	ListNode *p = index(i-1);
+	ListNode *q = new ListNode(item, p->next);
+	p->next = q;
+	len++;
+	return ok;
+}
+
+int LinkList::LL_del(int i)
+{
+	if (len == 0){
+		return error;
+	}
+	if (i<1 || i>len){
+		return error;
+	}
+
+	ListNode *s, *p=index(i-1);
+	s = p->next;
+	p->next = p->next->next;
+	int temp = s->data;
+	delete s;
+	len--;
+	return temp;
+}
+
+int LinkList::LL_change(int i,int j)
+{
+    ListNode *t;
+    ListNode *p1 = index(i-1);
+	ListNode *p2 = index(i);
+	ListNode *q1 = index(j-1);
+	ListNode *q2 = index(j);
+
+	p1->next = q2;
+	t = p2->next;
+	p2->next = q2->next;
+	q1->next = p2;
+	q2->next = t;
+
+	return ok;
+}	
+
+
+int main()
+{
+	int i,k,temp,m,n;
+	LinkList sl;
+
+	cin>>k;
+	for(i=1; i<=k; i++){
+		cin>>temp;
+		sl.LL_insert(temp,i);
+	}
+	for(i=1; i<=sl.LL_len(); i++)
+		cout<<sl.LL_get(i)<<" ";
+	cout<<endl;
+
+
+	cin>>m>>n;
+	sl.LL_change(m,n);
+	for(i=1; i<=sl.LL_len(); i++)
+		cout<<sl.LL_get(i)<<" ";
+	cout<<endl;
+
+	cin>>m>>n;
+
+	if (m<1 || n>sl.LL_len()){
+		cout<<"error";
+	}
+	else sl.LL_change(m,n);
+	cout<<endl;
+
+
+	return 0;
+}
+```
