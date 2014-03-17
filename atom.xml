@@ -4,7 +4,7 @@
   <title><![CDATA[ianthe's]]></title>
   <link href="http://iolanthe.github.io/atom.xml" rel="self"/>
   <link href="http://iolanthe.github.io/"/>
-  <updated>2014-03-17T16:55:14+08:00</updated>
+  <updated>2014-03-17T17:16:59+08:00</updated>
   <id>http://iolanthe.github.io/</id>
   <author>
     <name><![CDATA[iolanthe]]></name>
@@ -14,13 +14,153 @@
 
   
   <entry>
-    <title type="html"><![CDATA[6]]></title>
+    <title type="html"><![CDATA[data structure]]></title>
     <link href="http://iolanthe.github.io/blog/2014/03/17/6/"/>
     <updated>2014-03-17T11:32:37+08:00</updated>
     <id>http://iolanthe.github.io/blog/2014/03/17/6</id>
-    <content type="html"><![CDATA[<h1>this is my sixth blog</h1>
+    <content type="html"><![CDATA[<h1>图广度优先搜索算法</h1>
 
-<p>哈哈哈</p>
+<p>··· c++</p>
+
+<h1>include <iostream></h1>
+
+<h1>include <queue></h1>
+
+<p>using namespace std;
+//&mdash;&mdash;&mdash;-图的定义和矩阵初始化&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;
+const int MaxLen=20;//设定图最多包含20个顶点</p>
+
+<p>class Map
+{
+private:</p>
+
+<pre><code>bool Visited[MaxLen];//访问标识数组，标识每个顶点是否已访问
+int Matrix[MaxLen][MaxLen];//图的领接矩阵
+int Vexnum;//图的顶点数量
+
+void BFS(int v);//广度优先，私有函数，内部调用
+</code></pre>
+
+<p>public:</p>
+
+<pre><code>void SetMatrix(int vnum,int mx[MaxLen][MaxLen]);
+void BFSTraverse();//公有函数，被main调用
+</code></pre>
+
+<p>};
+//设置领接矩阵
+void Map::SetMatrix(int vnum,int mx[MaxLen][MaxLen])
+{</p>
+
+<pre><code>int i,j;
+Vexnum = vnum;//设置图的结点数
+for(i=0; i&lt;MaxLen; i++)//领接矩阵初始化为0
+    for(j=0; j&lt;MaxLen; j++)
+        Matrix[i][j] = 0;
+
+for(i=0; i&lt;Vexnum; i++)//领接矩阵接受外来参数
+    for(j=0; j&lt;Vexnum; j++)
+        Matrix[i][j] = mx[i][j];
+</code></pre>
+
+<p>}
+//&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;广度优先遍历函数&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;
+void Map::BFSTraverse()
+{//对图g作深度优先遍历，公有函数</p>
+
+<pre><code>int v=0;
+BFS(v);
+</code></pre>
+
+<p>}</p>
+
+<p>void Map::BFS(int v)//v是当前顶点
+{//按广度优先非递归遍历图G，使用辅助队列Q和访问标识数组visited</p>
+
+<pre><code>int w,u;//这些变量用于存放顶点编号
+int i,k;
+int *AdjVex = new int[Vexnum];//存放与顶点v相连的其他顶点编号
+queue&lt;int&gt; Q;
+
+for(v=0; v&lt;Vexnum; ++v)//把访问标志数组的值全设为false
+    Visited[v] = false;
+
+for(v=0; v&lt;Vexnum; ++v)//遍历所有未访问的顶点
+{
+    if(Visited[v] == false)//如果v未访问
+    {
+        Visited[v] = true;//设访问标志数组中的v顶点为ture
+        cout&lt;&lt;v&lt;&lt;" ";//输出v和空格，表示该顶点已被访问，并用空格隔开
+        Q.push(v);//把v压入队列
+
+        while (!Q.empty())//当队列非空，执行以下循环
+        {
+            u=Q.front();//取队头元素放入u中
+            Q.pop();//把队头元素弹出
+            //找出与顶点v相连的所有其他顶点，顶点编号放入数组AdjVex中
+            for (i=0; i&lt;Vexnum; i++)//把数组AdjVex的值初始化为-1
+            {
+                AdjVex[i]=-1;
+            }
+
+            k=0;//k表示AdjVex的存放顶点的位置下标
+            for(i=0; i&lt;Vexnum; i++)//搜索领接矩阵找出与顶点v连接的其他顶点编号
+            {
+                if(Matrix[u][i] == 1)
+                {
+                    AdjVex[k]=i;//把编号放入数组AdjVex的第k个位置，然后k++
+                    k++;
+                }
+            }
+
+            i=0;//i表示AdjVex数组下标
+            for(i=0; i&lt;Vexnum; i++)//对u的领接顶点进行遍历
+            {
+                w=AdjVex[i];//把AdjVex中的第i个顶点编号放入变量w中
+                if(w!=-1)//如果w不等于-1，则执行循环
+                {
+                    if(Visited[w]==false)//如果顶点w尚未访问
+                    {
+                        Visited[w] = true;//设置第w个顶点已访问
+                        cout&lt;&lt;w&lt;&lt;" ";//输出w和空格，表示该顶点已被访问，并用空格隔开
+                        Q.push(w);//把w压入队列
+                    }
+                }
+            }
+        }//while
+    }//if
+}//for
+cout&lt;&lt;endl;
+</code></pre>
+
+<p>}</p>
+
+<p>int main()
+{</p>
+
+<pre><code>int i,j,k,t;
+int vnum;
+int mx[MaxLen][MaxLen];
+Map myMap;
+
+cin&gt;&gt;t;
+for(k=0; k&lt;t; k++)
+{//输入图的初始化数据
+    for(i=0; i&lt;MaxLen; i++)
+        for(j=0; j&lt;MaxLen; j++)
+            mx[i][j]=0;
+        cin&gt;&gt;vnum;
+    for(i=0; i&lt;vnum; i++)
+        for(j=0; j&lt;vnum; j++)
+            cin&gt;&gt;mx[i][j];
+    myMap.SetMatrix(vnum,mx);//设置图的领接矩阵
+    myMap.BFSTraverse();//广度优先遍历
+}
+return 0;
+</code></pre>
+
+<p>}
+···</p>
 ]]></content>
   </entry>
   
