@@ -10,7 +10,7 @@ categories:
 
 #图广度优先搜索算法
 
-··· c++
+```c++
 #include <iostream>
 #include <queue>
 
@@ -132,4 +132,4 @@ int main()
 	}
 	return 0;
 }
-···
+```
