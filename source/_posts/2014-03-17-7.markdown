@@ -1,12 +1,10 @@
 ---
 layout: post
-title: "Data Structure"
+title: "Data Structure--顺序表"
 date: 2014-03-17 22:55:09 +0800
 comments: true
 categories: 
 ---
-
-#顺序表
 
 ```c++
 #include <iostream>

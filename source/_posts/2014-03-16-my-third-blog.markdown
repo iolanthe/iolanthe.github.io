@@ -1,13 +1,10 @@
 ---
 layout: post
-title: "Data Structure"
+title: "Data Structure--赫夫曼编码"
 date: 2014-03-16 16:50:42 +0800
 comments: true
 categories: 
 ---
-
-#赫夫曼编码
-
 
 
 ``` c++

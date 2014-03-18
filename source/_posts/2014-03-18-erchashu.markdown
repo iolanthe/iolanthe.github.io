@@ -1,0 +1,355 @@
+---
+layout: post
+title: "Data Structure--二叉树的遍历"
+date: 2014-03-18 13:07:24 +0800
+comments: true
+categories: 
+---
+
+```c++
+#include <iostream>
+using namespace std;
+//-------二叉树结点定义----------
+class BiTreeNode
+{
+private:
+	BiTreeNode *leftChild;//左指数指针
+	BiTreeNode *rightChild;//右指数指针
+public:
+	char data;//数据域
+  //构造函数和析构函数
+	BiTreeNode():leftChild(NULL),rightChild(NULL){}
+	BiTreeNode(char item, BiTreeNode *left = NULL,
+		        BiTreeNode *right = NULL):
+	            data(item),leftChild(left),rightChild(right){}
+				~BiTreeNode(){}
+
+				BiTreeNode * &Left(void)//注意返回值类型为指针的引用类型
+				{return leftChild;}
+				BiTreeNode * &Right(void)//注意返回值类型为指针的引用类型
+				{return rightChild;}
+};
+//-------------二叉树类定义-------------
+class BiTree
+{
+private:
+	BiTreeNode *root;//根结点指针
+	int i;
+	void Destroy(BiTreeNode * &t);
+	void CreateBiTree(BiTreeNode * &T,const char strTree[]);
+	void PreOrder(BiTreeNode * &t);
+	void InOrder(BiTreeNode * &t);
+	void PostOrder(BiTreeNode * &t);
+
+public:
+	//构造函数和析构函数
+	BiTree(void):root(NULL),i(0){};//构造函数
+	~BiTree(void){};//析构函数
+	void Destroy();
+	void MakeTree(const char strTree[]);//构造二叉树，利用先序遍历结果建树
+	void PreOrder();//前序遍历
+	void InOrder();//中序遍历
+	void PostOrder();//后序遍历
+};
+
+//-----------销毁和创建函数------------
+//销毁二叉树
+void BiTree::Destroy(void) //销毁二叉树，公有函数
+{
+    Destroy(root);
+}
+
+void BiTree::Destroy(BiTreeNode * &t)
+{
+	if(t !=NULL && t->Left() != NULL)
+		Destroy(t->Left());
+	if(t !=NULL && t->Right() != NULL)
+		Destroy(t->Right());
+    if(t != NULL)
+		delete t;
+}
+//构造二叉树，利用先序遍历结果建树
+void BiTree::MakeTree(const char strTree[])
+{ 
+	i=0;
+	CreateBiTree(root,strTree);
+}
+
+void BiTree::CreateBiTree(BiTreeNode * &T,const char strTree[])//递归建树
+{
+	char ch;
+	ch=strTree[i++];
+	if(ch=='0') T=NULL;
+	else
+	{
+		T=new BiTreeNode();
+		T->data = ch;//生成根结点
+		CreateBiTree(T->Left() , strTree);//构造左子树
+		CreateBiTree(T->Right(),  strTree);//构造右子树
+	}
+}
+//----------------先序遍历------------------
+//定义先序遍历函数
+void BiTree::PreOrder()
+{
+  PreOrder(root);
+}
+
+void  BiTree::PreOrder(BiTreeNode * &t)
+{
+	if(t != NULL)//若二叉树不为空
+	{
+		cout<<t->data;//输出当前结点的数据，表示该结点被访问了
+		PreOrder(t->Left());//先序遍历该结点的左孩子
+		PreOrder(t->Right());//先序遍历该结点的右孩子
+	}
+
+}
+//--------------中序遍历--------------
+//定义中序遍历函数
+void BiTree::InOrder()
+{
+  InOrder(root);
+}
+
+void  BiTree::InOrder(BiTreeNode * &t)
+{
+	if(t != NULL)//若二叉树不为空
+	{
+		InOrder(t->Left());//中序遍历该结点的左孩子
+		cout<<t->data;//输出当前结点的数据，表示该结点被访问了
+		InOrder(t->Right());//中序遍历该结点的右孩子
+	}
+
+}
+//--------------后序遍历--------------
+//定义后序遍历函数
+void BiTree::PostOrder()
+{
+  PostOrder(root);
+}
+
+void  BiTree::PostOrder(BiTreeNode * &t)
+{
+	if(t != NULL)//若二叉树不为空
+	{
+		PostOrder(t->Left());//后序遍历该结点的左孩子
+		PostOrder(t->Right());//后序遍历该结点的右孩子
+		cout<<t->data;//输出当前结点的数据，表示该结点被访问了
+	}
+}
+//---------------主程序-----------------
+int main(void)
+{
+	int t,i;
+	char strTree[800];
+	BiTree myTree;
+	cin>>t;
+	for(i=0;i<t;i++)
+	{
+		cin>>strTree;
+		myTree.MakeTree(strTree);
+
+		myTree.PreOrder();
+		cout<<endl;
+		myTree.InOrder();
+		cout<<endl;
+		myTree.PostOrder();
+		cout<<endl;
+
+		myTree.Destroy();
+	}
+	return 0;
+}
+
+//------------------输出叶结点的数量-----------------------------
+void  BiTree::PreOrder(BiTreeNode * &t)
+{
+	if(t!=NULL)
+	{
+		if(t->Left() == 0&&t->Right() == 0)
+		{
+			j++;
+		}
+		PreOrder(t->Left());
+		PreOrder(t->Right());
+	}
+	
+}
+int main(void)
+{
+	int t,i;
+	char strTree[800];
+	BiTree myTree;
+	cin>>t;
+	for(i=0;i<t;i++)
+	{
+		cin>>strTree;
+		myTree.MakeTree(strTree);
+		myTree.PreOrder();
+		cout<<j<<endl;
+		j=j-j; 
+		myTree.Destroy();
+	}
+	return 0;
+}
+
+
+
+
+//----------二叉树的最大结点----------
+#include <iostream>
+using namespace std;
+//---------------二叉树结点定义-----------------
+class BiTreeNode
+{
+private:
+	BiTreeNode *leftChild;//左子树指针
+	BiTreeNode *rightChild;//右子树指针
+public:
+	char data;//数据域
+	int weight;
+	//构造函数和析构函数
+	BiTreeNode():leftChild(NULL),rightChild(NULL){}
+	BiTreeNode(char item, BiTreeNode *left = NULL,
+		        BiTreeNode *right = NULL):
+	            data(item),leftChild(left),rightChild(right){}
+				~BiTreeNode(){}
+
+				BiTreeNode * &Left(void)//注意返回值类型为指针的引用类型
+				{return leftChild;}
+				BiTreeNode * &Right(void)//注意返回值类型为指针的引用类型
+				{return rightChild;}
+};
+//---------------二叉树定义-----------------
+class BiTree
+{
+private:
+	BiTreeNode *root;//根结点指针
+	int i;
+	int maxWeight;//最大权值
+	char maxData;//最大结点编号
+	void Destroy(BiTreeNode * &t);
+	void CreateBiTree(BiTreeNode * &T,const char strTree[]);
+	void PreSetWeight(BiTreeNode * &t,const int wTree[]);;
+	void FindMaxW(BiTreeNode  * &t);//找出最大权值
+
+public:
+	//构造函数和析构函数
+	BiTree(void):root(NULL),i(0){};//构造函数
+	~BiTree(void){};//析构函数
+	void Destroy();
+	void MakeTree(const char strTree[]);//构造二叉树，利用先序遍历结果建树
+	void PreSetWeight(const int wTree[]);//前序遍历设置每个结点的权重
+	char FindMaxW();//找出最大权值
+};
+
+
+void BiTree::Destroy(void) 
+{
+    Destroy(root);
+}
+
+void BiTree::Destroy(BiTreeNode * &t)
+{
+	if(t !=NULL && t->Left() != NULL)
+		Destroy(t->Left());
+	if(t !=NULL && t->Right() != NULL)
+		Destroy(t->Right());
+    if(t != NULL)
+		delete t;
+}
+//--------------二叉树创建函数和权值设置函数-----------
+void BiTree::MakeTree(const char strTree[])
+//构造二叉树，利用先序遍历结果建树，公有函数
+{ 
+	i=0;
+	CreateBiTree(root,strTree);
+}
+
+void BiTree::CreateBiTree(BiTreeNode * &T,const char strTree[])//递归建树私有函数
+{
+	char ch;
+	ch=strTree[i++];
+	if(ch=='0') T=NULL;
+	else
+	{
+		T=new BiTreeNode();
+		T->data = ch;//生成根结点
+		CreateBiTree(T->Left() , strTree);//构造左子树
+		CreateBiTree(T->Right(),  strTree);//构造右子树
+	}
+}
+//先序遍历设置权值
+void BiTree::PreSetWeight(const int wTree[])
+{
+	i=0;//初始化i为0
+	PreSetWeight(root,wTree);//调用PreSetWeight私有函数，传递参数是root和wTree
+}
+
+void  BiTree::PreSetWeight(BiTreeNode * &t, const int wTree[])
+{
+		if(t != NULL)//如果t不为空
+		{
+			t->weight=wTree[i];//设置当前结点权值等于数组i位置的值，是哪个数组
+
+			i++;
+
+			PreSetWeight(t->Left(),wTree);//递归调用本函数遍历左孩子
+			PreSetWeight(t->Right(),wTree);//递归调用本函数遍历右孩子
+		}
+
+	
+}
+//---------------查找最大权值的函数-------------
+//先序遍历寻找最大结点
+char BiTree::FindMaxW()
+//前序遍历访问二叉树，公有函数
+{
+	maxWeight=0;//初始化为0
+	FindMaxW(root);//调用FindMaxW私有函数
+	return maxData;//返回最大权值对应结点编号
+}
+
+void BiTree::FindMaxW(BiTreeNode * &t)
+{
+	if(t != NULL)//如果t不为空
+	{
+		if(t->weight > maxWeight)//当前结点权值大于已知最大权值maxWeight
+		{
+			maxWeight= t->weight;//把当前权值替换掉maxWeight
+			maxData= t->data;//把当前结点编号替换掉maxData
+		}
+
+		FindMaxW(t->Left());//递归调用本函数遍历左孩子
+		FindMaxW(t->Right());//递归调用本函数遍历右孩子
+		
+	}	
+}
+//-----------------主函数-----------------
+int main(void)
+{
+	int t,i,j,n;
+	char strTree[800],no;
+	int wTree[800];
+	BiTree myTree;
+	cin>>t;
+	for(i=0;i<t;i++)
+	{
+		cin>>strTree;//读入字符串
+		myTree.MakeTree(strTree);//创建二叉树
+		cin>>n;//读入权值数量
+		for (j=0;j<n;j++)
+		{
+			cin>>wTree[j];//把结点权值放入数组wTree
+		}
+		myTree.PreSetWeight(wTree);//调用函数把权值设置到每个结点中
+		no=myTree.FindMaxW();//调用函数，函数返回值放入变量no中，表示得到最大权值的结点编号
+	
+		cout<<no<<endl;//输入最大权值结点编号并换行
+
+		myTree.Destroy();
+	}
+	return 0;
+}
+```

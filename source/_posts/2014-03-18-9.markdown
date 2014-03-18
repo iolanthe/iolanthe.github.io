@@ -1,0 +1,164 @@
+---
+layout: post
+title: "Data Structure--堆栈应用"
+date: 2014-03-18 01:12:10 +0800
+comments: true
+categories: 
+---
+
+```c++
+#include <iostream>
+#include <string>
+#include <stack>
+
+using namespace std;
+int main(){
+
+	stack<char> s;//创建一个存放字符数据的堆栈对象
+	int i,t;
+	string str;//接受输入的字符串
+	cin>>t;
+
+	while(t--) {
+		cin>>str;
+		for (i=0; i<str.length(); i++)
+			s.push(str[i]);//把字符串的每个字符压入堆栈
+		while(!s.empty()){//判断堆栈非空
+			cout<<s.top();//获取栈顶元素，并输出
+			s.pop();//把栈顶元素弹出
+		}
+		cout<<endl;
+	}
+	return 0;
+}
+
+//括号匹配
+#include <iostream>
+#include <string>
+#include <stack>//使用c++自带的STL栈
+#include <cstdlib>
+#include <cstring>
+#include <iomanip>
+using namespace std;
+//-------全局变量和函数声明--------
+#define OK 0
+#define ERROR -1
+#define OVERFLOW -1
+#define OPSETSIZE 7
+typedef int Status;  //运算符号集合长度，目前只有7个符号
+
+char Prior[7][7] = {//算符间的优先关系
+	'>','>','<','<','<','>','>',
+	'>','>','<','<','<','>','>',
+	'>','>','>','>','<','>','>',
+	'>','>','>','>','<','>','>',
+	'<','<','<','<','<','=',' ',
+	'>','>','>','>',' ','>','>',
+	'<','<','<','<','<',' ','='
+};
+float Operate (float a,unsigned char theta,float b);
+char OPSET[OPSETSIZE] = {'+','-','*','/','(',')','#',};//运算符集合
+Status In(char Test,char * TestOp);//判断字符Test是否是运算符
+char precede(char Aop, char Bop);
+//-------辅助函数的定义----------
+float Operate (float a,unsigned char theta,float b){
+	switch(theta) {
+	    case '+':return a+b;
+		case '-':return a-b;
+		case '*':return a*b;
+		case '/':return a/b;
+		default :return 0;
+	}
+}
+
+Status In(char Test,char * TestOp) {
+	bool Find = false;
+	for (int i=0; i< OPSETSIZE; i++){
+		if (Test == TestOp[i] ) Find= true;
+	}
+	return Find;
+}
+
+int ReturnOpOrd(char op,char * TestOp) {
+	int i;
+	for (i=0; i< OPSETSIZE; i++){
+		if (op == TestOp[i] ) return i;
+	}
+	return 0;
+}
+
+char precede(char Aop, char Bop) {
+	return Prior[ReturnOpOrd(Aop,OPSET)][ReturnOpOrd(Bop,OPSET)];
+}
+//-------------求值函数-----------------
+float EvalvateExpression(string MyExp) {
+//算术表达式求值的算符优先算法
+//设OPTR和OPND分别为运算符栈和运算数栈，OP为运算符集合
+	stack <char> OPTR;//运算符栈，字符元素
+	stack <double> OPND;//运算数栈，实数元素
+	char TempData[20];
+	double Data,a,b, r;
+	char theta,Dr[2];
+	char * c;
+
+	OPTR.push('#');
+	c = &MyExp[0];//c指向表达式字符串首地址
+	strcpy(TempData,"\0");
+	
+	while (*c!= '#' || OPTR.top() != '#'){
+		if (!In(*c, OPSET)){//读入的字符不是运算符，是1个数字
+			Dr[0]=*c;
+			Dr[1]='\0';
+			strcat(TempData,Dr);
+			c++;//读入1个字符
+			if(In(*c,OPSET)){//是运算符，表明读入了一个完整的操作数数
+				Data = (float)atof(TempData);
+				OPND.push(Data);//将操作数压入堆栈
+				strcpy(TempData,"\0");
+			}
+		}
+		
+		else {//是运算符，开始进行计算
+			switch (precede(OPTR.top(),*c)) {	
+			case '<'://栈顶元素优先权低
+				OPTR.push(*c);
+				c++;
+				break;
+				
+			case '='://脱括号并接收下一字符
+				OPTR.pop();
+				c++;
+				break;
+
+			case '>'://退栈并将运算结果入栈
+				theta = OPTR.top();
+				OPTR.pop();
+				b = OPND.top();
+				OPND.pop();
+				a = OPND.top();
+				OPND.pop();
+
+				OPND.push(Operate(a,theta,b));
+				
+				break;
+			}//switch
+		}//else
+	}//while
+
+	return OPND.top();
+}//EvaluateExpress
+//-----------主函数------------
+int main(){
+	string Exp;//输入表达式字符串，以#结尾
+	int t;
+	double result;
+	cin>>t;
+	while (t--) {
+		cin>>Exp;
+		result = EvalvateExpression(Exp);
+		cout<<fixed<<setprecision(4)<<result<<endl;//输出带4位小数的浮点数结果
+	}
+
+	return 0;
+}
+```

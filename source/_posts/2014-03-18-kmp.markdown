@@ -1,0 +1,138 @@
+---
+layout: post
+title: "Data Structure--串应用 KMP算法"
+date: 2014-03-18 13:06:02 +0800
+comments: true
+categories: 
+---
+
+```c++
+//括号匹配
+#include <iostream>
+#include <string>
+#include <stack>//使用c++自带的STL栈
+#include <cstdlib>
+#include <cstring>
+#include <iomanip>
+//-------串类定义-----------
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class myString
+{
+private:
+	string mainstr;//串
+	int size;//串长度
+
+	void GetNext(const string &p,int next[]);
+	int KMPFind(const string &p,int pos,int next[]);
+
+public:
+	myString();//构造函数
+	~myString();//析构函数
+	void SetVal(const string &sp);//设定主串字符内容和长度
+	int KMPFindSubstr(const string &p,int pos);
+};
+
+myString::myString()//构造函数，定义对象并赋初始串值
+{
+	size = 0;
+	mainstr = "";
+}
+myString::~myString()//析构函数
+{
+	size = 0;
+	mainstr = "";
+}
+//----------赋值与next函数-----------
+void myString::SetVal(const string &sp)
+{
+	mainstr = "";
+	mainstr.assign(sp);
+	size = mainstr.length();
+}
+
+void myString::GetNext(const string &p, int next[])
+//求模式串t的next[j]函数值存于数组next中
+{
+	int j=1,k=0;
+
+	next[0] = -1;
+	next[1] = 0;
+	while(j< p.length()-1)
+	{
+		if(p[j] == p[k])
+		{
+			next[j+1] = k+1;
+			j++;
+			k++;
+		}
+		else if(k == 0)
+		{
+			next[j+1] = 0;
+			j++;
+		}
+		else k = next[k];
+	}
+}
+//---------KMP内部函数--------------
+int myString::KMPFind(const string &p, int pos,int next[])
+{
+	int i = pos, j = 0,v;
+	int L = p.length();
+	while  ((i <size)  && (j<L))
+	{
+		if( j==-1 || mainstr[i] == p[j])
+		{
+			i++;
+			j++;
+		}
+		else
+			j = next[j];
+	}
+
+	if (j==p.length())
+		v = i-p.length();
+	else
+		v = -1;
+
+	return v;
+}
+//-----------KMP外部函数-------------
+int myString::KMPFindSubstr(const string &p,int pos)
+//主串从pos开始查找子串p.找到返回p在主串的开始位置否则返回-1
+{
+	int i;
+	int L = p.length();
+	int *next = new int[L];
+	GetNext(p,next);
+	for(i=0;i<L;i++)
+		cout<<next[i]<<' ';
+	cout<<endl;
+	int v = -1;
+	v= KMPFind ( p,pos,next);
+	delete []next;
+	return v;
+}
+//-------------主函数-----------
+int main()
+{
+	int t,i,pos;
+	string s1,p1;//s是主串，p是模式串
+
+	cin>>t;
+	for (i=0 ; i<t ; i++)
+	{
+		pos = 0;
+		cin>>s1;
+		cin>>p1;
+		myString ms;//创建字符串对象
+		ms.SetVal(s1);
+		pos = ms.KMPFindSubstr(p1,0)+1;
+		cout<<pos<<endl;
+	}
+	return 0;
+}
+```

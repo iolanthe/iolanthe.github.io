@@ -1,12 +1,12 @@
 ---
 layout: post
-title: "Data Strkcture "
+title: "Data Strkcture--单链表 "
 date: 2014-03-18 01:03:51 +0800
 comments: true
 categories: 
 ---
 
-#单链表
+
 ```c++
 #include <iostream>
 using namespace std;

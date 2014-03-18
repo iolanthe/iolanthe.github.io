@@ -1,0 +1,340 @@
+---
+layout: post
+title: "Data Structure--查找"
+date: 2014-03-18 13:11:21 +0800
+comments: true
+categories: 
+---
+
+#静态查找
+```c++
+#include <iostream>
+using namespace std;
+
+#define ok 0
+#define error -1
+#define MaxLen 100
+//-----------队列定义和顺序查找函数------------
+class Seq {
+private:
+	int SeqList[MaxLen];//存储数据队列，位置从1开始
+	int Len;//队列实际长度
+public:
+	void SetSeq(int n,const int list[]);//读取输入的数据，设置队列
+	int SeqSearch(int key);//顺序查找，如果队列中有记录key,返回记录位置，如果没有-1
+};
+
+void Seq::SetSeq(int n,const int list[])
+{//把输入数据读入到队列SeqList中
+	int i;
+	Len = n;//设置队列的实际长度
+	for (i=1; i<=n; i++)//队列位置从1开始
+		SeqList[i] = list[i-1];
+}
+
+int Seq::SeqSearch(int key)//带哨兵的顺序查找
+{//队列位置从1开始
+	int i;
+	SeqList[0]=key;	//设置哨兵
+
+	for (i=Len; SeqList[i]!=key; --i);//从SeqList的末尾开始比较，找与key相等的记录
+	if (i==0) return error;//查找失败返回error
+	else return i;//查找成功返回位置
+}
+
+int main()
+{
+	int i,t,n,key;
+	int list[MaxLen];
+	Seq mySeq;
+
+	cin>>n;//输入数据队列长度
+	for(i=0; i<n; i++)
+		cin>>list[i];//输入队列数据 作顺序表
+	mySeq.SetSeq(n,list);
+	cin >>t;//输入要查找的记录数量
+	for(i=0; i<t; i++)
+	{
+		cin>>key;//输入要查找的数据key
+		n = mySeq.SeqSearch(key);//使用顺序查找
+		if (n==error) cout<<"error"<<endl;
+		else cout<<n<<endl;//输出找到的位置
+	}
+	return 0;
+}
+
+
+//-------------------折半查找---------------
+#include <iostream>
+using namespace std;
+
+#define ok 0
+#define error -1
+#define MaxLen 100
+
+class Seq {
+private:
+	int SeqList[MaxLen];//存储数据队列，位置从1开始
+	int Len;//队列实际长度
+public:
+	void SetSeq(int n,const int list[]);//读取输入的数据，设置队列
+	int BinSearch(int key);//折半查找，如果队列中有记录key,返回记录位置，如果没有-1
+};
+
+void Seq::SetSeq(int n,const int list[])
+{//把输入数据读入到队列SeqList中
+	int i;
+	Len = n;//设置队列的实际长度
+	for (i=1; i<=n; i++)//队列位置从1开始
+		SeqList[i] = list[i-1];
+}
+
+int Seq::BinSearch(int key)
+{//折半查找，队列位置从1开始
+	int low, mid, high;
+	low = 1;
+	high = Len;
+	
+	while (low <= high) {
+		mid = (low + high) / 2;//取mid为low和high的中间值
+		if (key == SeqList[mid]) //比较队列SeqList中第mid位置的数值和key,如果相等返回位置mid
+			return mid;  
+		else if (key < SeqList[mid]) //如果key小于队列中的数值，设置high等于mid-1，在前半区间查找
+			high = mid - 1; 
+		else //否则设置low等于mid+1,在后半区间查找
+			low = mid + 1;  
+	}
+	return error;
+}
+
+int main()
+{
+	int i,t,n,key;
+	int list[MaxLen];
+	Seq mySeq;
+
+	cin>>n;//输入数据队列长度
+	for(i=0; i<n; i++)
+		cin>>list[i];//输入队列数据，作顺序表
+	mySeq.SetSeq(n,list);
+	cin >>t;//输入要查找的记录数量
+	for(i=0; i<t; i++)
+	{
+		cin>>key;//输入要查找的数据key
+		n = mySeq.BinSearch(key);//使用折半查找
+		if (n==error) cout<<"error"<<endl;
+		else cout<<n<<endl;//输出找到的位置
+	}
+	return 0;
+}
+
+
+//--------------------顺序索引查找---------------------
+#include <iostream>
+using namespace std;
+//------------------队列定义和设置函数--------------------
+#define ok 0
+#define error -1
+#define MaxLen 100
+
+class Seq {
+private:
+	int SeqList[MaxLen];//主表，存储数据的队列，位置从1开始
+	int indexMax[MaxLen];//索引表中每个块的最大值
+	int indexPos[MaxLen];//索引表中每个块的开始位置
+	int Len;//队列实际长度
+	int Bnum;//队列分成多少个块
+public:
+	void SetSeq(int n,int b, const int list[], int imax[]);//读取输入的数据，设置队列和索引表
+	int IndexSearch(int key);	//顺序索引查找，如果队列中有记录key,返回记录位置，如果没有-1
+	int STimes;//比较次数
+};
+
+void Seq::SetSeq(int n,int b, const int list[], int imax[])
+{//n是主表长度 b是块的数量 list是主表数据 imax是索引表的最大值数组
+	int i,k;
+	Len = n;//设置队列的实际长度
+	Bnum = b;//设置队列分成多少个块
+	for (i=1; i<=n; i++)//设置主表数据
+		SeqList[i] = list[i-1];
+  //设置索引表中的最大值和块开始位置
+    for (k=1; k<=b; k++)
+	{//最大值是根据imax数组设置
+		indexMax[k] = imax[k-1];//块开始位置是计算得到的
+	    indexPos[k] = 1+((k-1)*(n/b));
+		//除了最后一个块 其他块的长度都是固定的 所以每个块的开始位置等于前一块的开始位置加上块长度
+	}
+}
+//-----------------顺序索引查找函数---------------
+int Seq::IndexSearch(int key)
+{//索引表和块都采用顺序查找，假定每个块的数据不小于前一块的最大值
+	int i,k,j,t;
+	STimes = 0;//比较次数初始化为0
+	i=1;
+//索引表内的顺序查找，找出的块号保存在i中
+	for (j=1; j<=Bnum; ++j ) 
+	{
+		STimes++;//注意每次索引表比较，都要增加1次比较次数STimes
+		if(key<=indexMax[j])
+		{
+			i=j;
+			break;
+		}
+	}
+
+	if (i>Bnum) return error;//输入的数值比索引表的值都大，查找失败
+
+	k=indexPos[i];//找出块的开始位置
+//块内的顺序查找，如果查找成功直接返回位置
+	for( t=k; t<k+(Len/Bnum); ++t)//注意每次块内比较，都要增加1次比较次数STimes
+	{   
+		++STimes;
+		if ( SeqList[t] == key ) 
+			return t;
+	}
+	if (t>Len || SeqList[t]!=key)
+		return error;
+	return t;
+}
+
+
+
+int main()
+{
+	int i,t,n,b,key;
+	int list[MaxLen],imax[MaxLen];
+	Seq mySeq;
+
+	cin>>n;//输入数据队列长度，n个
+	for(i=0; i<n; i++)
+		cin>>list[i];//输入队列数据，作顺序表
+	cin>>b;//输入数据队列长度，b个
+	for(i=0; i<b; i++)
+		cin>>imax[i];//输入队列数据，作顺序表
+
+	mySeq.SetSeq(n,b,list,imax);
+
+	cin >>t;//输入要查找的记录数量
+	for(i=0; i<t; i++)
+	{
+		cin>>key;//输入要查找的数据key
+		n = mySeq.IndexSearch(key);//使用顺序索引查找
+		if (n==error) cout<<"error"<<endl;
+		else cout<<n<<'-'<<mySeq.STimes<<endl;//输出位置和查找次数
+	}
+	return 0;
+}
+```
+#哈希查找
+
+```c++
+//实现哈希查找，哈希函数为求余，哈希冲突用链地址法和表头插入
+#include <iostream>
+using namespace std;
+
+#define ok 999
+#define error -1
+#define MaxLen 100
+#define Prime 11//求余法的质数
+#define HashLen 11//哈希表头的长度
+//---------------树结点和树定义--------------
+class HashNode//哈希表中的链表结点
+{
+public:
+	int data;
+	HashNode * next;
+};
+
+class HashList
+{
+private:
+	HashNode Table[HashLen];//存储数据的哈希表，表头的data存放链表长度
+	void Insert(int addr, int key);//读取输入的数据，设置队列
+public:
+	HashList();
+	int Stimes;//查找次数
+	int Search(int key);//查找成功返回哈希地址，查找失败则表头插入，并返回error
+};
+
+HashList::HashList()//初始化
+{
+	for(int i=0; i<HashLen; i++)
+	{
+		Table[i].data = 0;//每个链表头元素的data数值都初始化为0，表示第i个链表长度初始化为0
+		Table[i].next = NULL;//每个链表头元素的next数值都初始化为NULL，表示第i个链表初始化为空
+	}
+}
+//--------------插入与查找----------------
+void HashList::Insert(int addr, int key)//插入函数
+{
+	HashNode * q = new HashNode();//创建一个新链表结点
+	HashNode * temp = new HashNode();
+//做表头插入
+	q->data = key; 
+	temp = Table[addr].next;
+
+	Table[addr].next=q;
+
+	q->next =temp;
+
+	Table[addr].data++;//链表头元素的data+1，表示链表长度+1
+}
+
+int HashList::Search(int key)//哈希查找
+{//查找成功返回哈希地址，查找失败则表头插入，并返回error
+	int addr;
+	HashNode * p;
+	Stimes = 0;
+	addr = key % Prime;//求余法作为哈希函数，求得哈希地址addr
+	p = Table[addr].next;
+ //根据哈希地址，进行链表查找
+	if(Table[addr].data == 0)//链表为空
+	{
+		Insert(addr,key);//调用Insert函数做插入，然后返回error
+		return error;
+	}
+
+	else
+	{
+		while(p != NULL)//链表不空，则沿着链表查找，每次查找记得次数+1
+		{
+			Stimes++;
+			if(p->data == key) 
+			{
+				return addr;//查找成功返回哈希地址addr
+			}
+			p = p->next;
+		}
+			Insert(addr,key);//查找不成功则调用Insert函数做插入然后返回error
+		    return error;
+	}
+	return addr;//查找成功返回哈希地址
+}
+
+int main()
+{
+	int i, t, n, key;
+	int list[MaxLen];
+	HashList myHash;
+
+	cin>>n;//输入n表示要输入n个数据
+	for (i=0; i<n; i++)//输入n个数据，放在list数组中
+	{
+		cin>>list[i];
+		myHash.Search(list[i]);
+		//对list数组的每个元素进行查找，实际就是通过查找不成功执行插入，从而建立哈希表
+	}
+
+	cin>>t;//要查找的t个数据
+	for (i=0; i<t; i++)
+	{
+		cin>>key;//逐个输入要查找的数据
+
+		if(myHash.Search(key) == error)//查找失败输出error
+			cout<<"error"<<endl;
+		else//若成功则输出哈希地址+空+查找次数
+			cout<<myHash.Search(key)<<" "<<myHash.Stimes<<endl;
+	}
+	return 0;
+}
+```

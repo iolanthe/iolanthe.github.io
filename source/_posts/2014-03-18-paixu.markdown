@@ -1,0 +1,206 @@
+---
+layout: post
+title: "Data Structure--排序"
+date: 2014-03-18 13:16:02 +0800
+comments: true
+categories: 
+---
+
+#希尔排序
+
+```c++
+//------------希尔排序------------
+#include <iostream>
+using namespace std;
+
+#define MaxLen 100
+//希尔排序类定义
+class ShellSort {
+private:
+	int SList[MaxLen];//存储数据列表
+	int Len;//实际包含的数据个数
+	int Delta[MaxLen];//希尔排序的间隔数组
+	int DLen;//Delta数组的实际长度
+	void ShellInsert(int dk);//根据间隔dk做插入排序，被函数Sort调用
+
+public:
+	void InitList(int n,const int ilist[]);//读取输入的数据放入SList中
+	void Sort();//对SList数组排序
+	void Print();//把排序后的数据输出，注意调用Sort函数之后再调用本函数
+};
+//数据初始化，参数n表示输入n个数据，参数list表示外来输入的数据
+void ShellSort::InitList(int n,const int ilist[])
+{
+	int i, gap;
+	DLen=0;
+	Len = n;//把参数n放入Len
+	for(i=1; i<=Len; i++)
+	{
+		SList[i]=ilist[i-1];//把数组ilist放入SList中
+	}
+
+	for(i=0; i<MaxLen; i++)
+		Delta[i] = -1;
+
+//用于设置间隔数组Delta
+    gap = n;
+
+//用于实现n循环除2直到1，并把结果放入Delta数组中
+	for(i=0;  i<n;i++)
+	{
+		gap=gap/2;
+		Delta[i]=gap;
+		DLen++;
+		if(gap==1)
+			break;
+	}
+
+
+}
+//希尔排序
+void ShellSort::Sort()
+{
+	int i;
+	for (i=0; i<DLen; i++)
+		ShellInsert(Delta[i]);//一趟增量为data[k]的插入排序
+}
+
+//希尔插入
+void ShellSort::ShellInsert(int dk)
+{//根据增量dk做插入排序，被函数Sort调用
+	int i,j;
+	for (i=dk+1; i<=Len; ++i)
+		if ( SList[i] < SList[i-dk] ) 
+		{ 
+			SList[0] = SList[i];                
+			for (j=i-dk; j>0 && SList[0] < SList[j]; j-=dk)
+				SList[j+dk] = SList[j];          
+			SList[j+dk] = SList[0];          
+		}
+} 
+
+//希尔排序数据输出，数据之间用空格隔开，被Sort函数调用
+void ShellSort::Print()
+{//把SList数据逐个输出，并用空格隔开
+	for (int i=1; i<=Len; i++)
+		cout<<SList[i]<<" ";
+	
+	cout<<endl;
+}
+
+int main()
+{
+	int i, j, t, n;
+	int list[MaxLen];
+	ShellSort myShell;
+
+	cin>>t;
+	for(i=0;i<t;i++)
+	{
+		cin>>n;
+		for(j=0; j<n; j++)
+			cin>>list[j];
+		//输入数据后，用InitList函数读取输入的数据
+		myShell.InitList(n,list);
+		myShell.Sort();//排序
+		myShell.Print();//输出
+	}
+	return 0;
+}
+
+```
+
+#快速排序
+```c++
+//实现快速排序
+#include <iostream>
+using namespace std;
+
+#define MaxLen 100
+
+class QuickSort {
+private:
+	int QList[MaxLen];//存储数据列表
+	int Len;//实际包含的数据个数
+	int Partition(int low,int high);//交换数据位置，定枢轴
+	void QSort(int low,int high);//快速排序，私有函数
+
+public:
+	void InitList(int n,const int ilist[]);//读取输入的数据放入SList中
+	void Sort();//公有函数，对QList进行快速排序
+	void Print();//把排序后的数据输出，注意调用Sort函数之后再调用本函数
+};
+//数据初始化，参数n表示输入n个数据，参数ilist表示外来输入的数据
+void QuickSort::InitList(int n,const int ilist[])
+{//把输入的数据放入ilist、设置数据序列长度
+	int i;
+	Len = n;
+	for(i=0; i<Len; i++)
+	{
+		QList[i]=ilist[i];
+	}
+
+}
+//快速排序，公有函数
+void QuickSort::Sort()
+{
+	QSort(0,Len-1);
+}
+//快速排序，私有函数
+void QuickSort::QSort(int low,int high)
+{  //对数据序列中的子序列[low..high]进行快速排序
+	int pivotloc;
+	pivotloc = QList[low];
+	//注意本程序数组是从位置0开始存储数据
+	if (low < high) 
+	{                    
+		pivotloc = Partition(low, high);  
+		QSort(low, pivotloc-1); 
+		QSort(pivotloc+1, high);     
+	}
+} // QSort
+//快速排序，实现数据交换操作的函数，函数返回枢轴记录的位置
+int QuickSort::Partition(int low, int high) 
+{  //当发现数据顺序不对就交换双方位置，最终使枢轴记录插入合适位置
+	int pivotkey = QList[low];    
+	while (low<high) {            
+		while (low<high && QList[high]>=pivotkey) 
+			--high;
+		QList[low] = QList[high];      
+		while (low<high && QList[low]<=pivotkey) 
+			++low;
+		QList[high] = QList[low];     
+	}
+	QList[low] = pivotkey;           
+	return low;                 
+} // Partition
+
+
+//排序后数据输出，数据之间用空格隔开
+void QuickSort::Print()
+{
+	for (int i=0; i<Len; i++)
+		cout<<QList[i]<<" ";
+	
+	cout<<endl;
+}
+
+int main()
+{
+	int i, j, t, n;
+	int list[MaxLen];
+	QuickSort mySort;
+	cin>>t;
+	for(i=0;i<t;i++)
+	{
+		cin>>n;
+		for(j=0; j<n; j++)
+			cin>>list[j];
+			//输入数据后，用InitList函数读取输入的数据
+		mySort.InitList(n,list);
+		mySort.Sort();
+		mySort.Print();
+	}
+	return 0;
+}
+```
