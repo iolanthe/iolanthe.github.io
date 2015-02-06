@@ -1,0 +1,13 @@
+---
+layout: post
+title: "2015-2-6-abc.markdown"
+date: 2015-02-06 18:20:55 +0800
+comments: true
+categories: 
+---
+
+
+```javascript
+alert("welcome!");
+
+```
